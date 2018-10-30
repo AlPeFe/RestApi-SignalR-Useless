@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GDROIDModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DEVICE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CONNECTION_ID" Type="varchar" MaxLength="50" />
+          <Property Name="DEVICE_NAME" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="VHI" Type="varchar" MaxLength="50" />
+          <Property Name="LAST_DATE" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MESSAGE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BODY" Type="varchar" MaxLength="250" />
+          <Property Name="ID_DEVICE" Type="int" />
+          <Property Name="AREA" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="E_S" Type="bit" Nullable="false" />
+          <Property Name="SEND_DATE" Type="datetime" />
+        </EntityType>
+        <EntityType Name="NOTIFICATION">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_DEVICE" Type="int" Nullable="false" />
+          <Property Name="ID_TYPE" Type="int" Nullable="false" />
+          <Property Name="DATE" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NOTIFICATION_TYPE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NOT_CODE" Type="nchar" MaxLength="3" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK_MESSAGE_DEVICE">
+          <End Role="DEVICE" Type="Self.DEVICE" Multiplicity="0..1" />
+          <End Role="MESSAGE" Type="Self.MESSAGE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DEVICE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MESSAGE">
+              <PropertyRef Name="ID_DEVICE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NOTIFICATION_DEVICE">
+          <End Role="DEVICE" Type="Self.DEVICE" Multiplicity="1" />
+          <End Role="NOTIFICATION" Type="Self.NOTIFICATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DEVICE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="NOTIFICATION">
+              <PropertyRef Name="ID_DEVICE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NOTIFICATION_NOTIFICATION_TYPE1">
+          <End Role="NOTIFICATION_TYPE" Type="Self.NOTIFICATION_TYPE" Multiplicity="1" />
+          <End Role="NOTIFICATION" Type="Self.NOTIFICATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NOTIFICATION_TYPE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="NOTIFICATION">
+              <PropertyRef Name="ID_TYPE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GDROIDModelStoreContainer">
+          <EntitySet Name="DEVICE" EntityType="Self.DEVICE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MESSAGE" EntityType="Self.MESSAGE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NOTIFICATION" EntityType="Self.NOTIFICATION" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NOTIFICATION_TYPE" EntityType="Self.NOTIFICATION_TYPE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_MESSAGE_DEVICE" Association="Self.FK_MESSAGE_DEVICE">
+            <End Role="DEVICE" EntitySet="DEVICE" />
+            <End Role="MESSAGE" EntitySet="MESSAGE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NOTIFICATION_DEVICE" Association="Self.FK_NOTIFICATION_DEVICE">
+            <End Role="DEVICE" EntitySet="DEVICE" />
+            <End Role="NOTIFICATION" EntitySet="NOTIFICATION" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NOTIFICATION_NOTIFICATION_TYPE1" Association="Self.FK_NOTIFICATION_NOTIFICATION_TYPE1">
+            <End Role="NOTIFICATION_TYPE" EntitySet="NOTIFICATION_TYPE" />
+            <End Role="NOTIFICATION" EntitySet="NOTIFICATION" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GDROIDModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="DEVICE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CONNECTION_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DEVICE_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="VHI" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="MESSAGE" Relationship="Self.FK_MESSAGE_DEVICE" FromRole="DEVICE" ToRole="MESSAGE" />
+          <NavigationProperty Name="NOTIFICATION" Relationship="Self.FK_NOTIFICATION_DEVICE" FromRole="DEVICE" ToRole="NOTIFICATION" />
+          <Property Name="LAST_DATE" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="MESSAGE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BODY" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="ID_DEVICE" Type="Int32" />
+          <Property Name="AREA" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="E_S" Type="Boolean" Nullable="false" />
+          <Property Name="SEND_DATE" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="DEVICE" Relationship="Self.FK_MESSAGE_DEVICE" FromRole="MESSAGE" ToRole="DEVICE" />
+        </EntityType>
+        <EntityType Name="NOTIFICATION">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_DEVICE" Type="Int32" Nullable="false" />
+          <Property Name="ID_TYPE" Type="Int32" Nullable="false" />
+          <Property Name="DATE" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="DEVICE" Relationship="Self.FK_NOTIFICATION_DEVICE" FromRole="NOTIFICATION" ToRole="DEVICE" />
+          <NavigationProperty Name="NOTIFICATION_TYPE" Relationship="Self.FK_NOTIFICATION_NOTIFICATION_TYPE1" FromRole="NOTIFICATION" ToRole="NOTIFICATION_TYPE" />
+        </EntityType>
+        <EntityType Name="NOTIFICATION_TYPE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NOT_CODE" Type="String" MaxLength="3" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="NOTIFICATION" Relationship="Self.FK_NOTIFICATION_NOTIFICATION_TYPE1" FromRole="NOTIFICATION_TYPE" ToRole="NOTIFICATION" />
+        </EntityType>
+        <Association Name="FK_MESSAGE_DEVICE">
+          <End Role="DEVICE" Type="Self.DEVICE" Multiplicity="0..1" />
+          <End Role="MESSAGE" Type="Self.MESSAGE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DEVICE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MESSAGE">
+              <PropertyRef Name="ID_DEVICE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NOTIFICATION_DEVICE">
+          <End Role="DEVICE" Type="Self.DEVICE" Multiplicity="1" />
+          <End Role="NOTIFICATION" Type="Self.NOTIFICATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DEVICE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="NOTIFICATION">
+              <PropertyRef Name="ID_DEVICE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NOTIFICATION_NOTIFICATION_TYPE1">
+          <End Role="NOTIFICATION_TYPE" Type="Self.NOTIFICATION_TYPE" Multiplicity="1" />
+          <End Role="NOTIFICATION" Type="Self.NOTIFICATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NOTIFICATION_TYPE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="NOTIFICATION">
+              <PropertyRef Name="ID_TYPE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GDROIDEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DEVICE" EntityType="Self.DEVICE" />
+          <EntitySet Name="MESSAGE" EntityType="Self.MESSAGE" />
+          <EntitySet Name="NOTIFICATION" EntityType="Self.NOTIFICATION" />
+          <EntitySet Name="NOTIFICATION_TYPE" EntityType="Self.NOTIFICATION_TYPE" />
+          <AssociationSet Name="FK_MESSAGE_DEVICE" Association="Self.FK_MESSAGE_DEVICE">
+            <End Role="DEVICE" EntitySet="DEVICE" />
+            <End Role="MESSAGE" EntitySet="MESSAGE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NOTIFICATION_DEVICE" Association="Self.FK_NOTIFICATION_DEVICE">
+            <End Role="DEVICE" EntitySet="DEVICE" />
+            <End Role="NOTIFICATION" EntitySet="NOTIFICATION" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NOTIFICATION_NOTIFICATION_TYPE1" Association="Self.FK_NOTIFICATION_NOTIFICATION_TYPE1">
+            <End Role="NOTIFICATION_TYPE" EntitySet="NOTIFICATION_TYPE" />
+            <End Role="NOTIFICATION" EntitySet="NOTIFICATION" />
+          </AssociationSet>
+          <EntitySet Name="sysdiagrams" EntityType="GDROIDModel.sysdiagrams" />
+        </EntityContainer>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GDROIDModelStoreContainer" CdmEntityContainer="GDROIDEntities">
+          <EntitySetMapping Name="DEVICE">
+            <EntityTypeMapping TypeName="GDROIDModel.DEVICE">
+              <MappingFragment StoreEntitySet="DEVICE">
+                <ScalarProperty Name="LAST_DATE" ColumnName="LAST_DATE" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CONNECTION_ID" ColumnName="CONNECTION_ID" />
+                <ScalarProperty Name="DEVICE_NAME" ColumnName="DEVICE_NAME" />
+                <ScalarProperty Name="VHI" ColumnName="VHI" />
+                </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MESSAGE">
+            <EntityTypeMapping TypeName="GDROIDModel.MESSAGE">
+              <MappingFragment StoreEntitySet="MESSAGE">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="BODY" ColumnName="BODY" />
+                <ScalarProperty Name="ID_DEVICE" ColumnName="ID_DEVICE" />
+                <ScalarProperty Name="AREA" ColumnName="AREA" />
+                <ScalarProperty Name="E_S" ColumnName="E_S" />
+                <ScalarProperty Name="SEND_DATE" ColumnName="SEND_DATE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NOTIFICATION">
+            <EntityTypeMapping TypeName="GDROIDModel.NOTIFICATION">
+              <MappingFragment StoreEntitySet="NOTIFICATION">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ID_DEVICE" ColumnName="ID_DEVICE" />
+                <ScalarProperty Name="ID_TYPE" ColumnName="ID_TYPE" />
+                <ScalarProperty Name="DATE" ColumnName="DATE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NOTIFICATION_TYPE">
+            <EntityTypeMapping TypeName="GDROIDModel.NOTIFICATION_TYPE">
+              <MappingFragment StoreEntitySet="NOTIFICATION_TYPE">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NOT_CODE" ColumnName="NOT_CODE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="GDROIDModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
